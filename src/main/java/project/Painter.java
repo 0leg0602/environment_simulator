@@ -28,6 +28,7 @@ public class Painter extends JPanel implements ActionListener {
         g.fillRect(0, 0, window_width, window_height);
 
         if (System.currentTimeMillis() - old_time > TICK_SPEED){
+            System.out.println("There are " + world.all_entities.size() + " entities");
 
             for (int i = 0; i < world.all_entities.size(); i++) {
                 world.all_entities.get(i).tick();
@@ -36,9 +37,14 @@ public class Painter extends JPanel implements ActionListener {
             old_time = System.currentTimeMillis();
         }
 
-        g.setColor(Color.WHITE);
         for (int i = 0; i < world.all_entities.size(); i++) {
-            draw_entity(g, world.all_entities.get(i).pos);
+            Entity entity = world.all_entities.get(i);
+            g.setColor(Color.WHITE);
+            if (entity instanceof Animal animal) {
+                int color_strength = (int) ((animal.hunger / 25.0) * 255);
+                g.setColor(new Color(255, color_strength, color_strength));
+            }
+            draw_entity(g, entity.pos);
         }
 
 
@@ -47,8 +53,8 @@ public class Painter extends JPanel implements ActionListener {
     }
 
     private void draw_entity(Graphics g, Position pos){
-        double scale_v = window_height/100.0;
-        double scale_h = window_width/100.0;
+        double scale_v = (double) window_height /World.GRID_HEIGHT;
+        double scale_h = (double) window_width /World.GRID_WIDTH;
 
         g.fillRect((int) (pos.x * scale_h), (int) (pos.y * scale_v), (int) scale_h, (int) scale_v);
 

@@ -1,15 +1,18 @@
 package project;
 
-import java.util.ArrayList;
 import java.util.Collections;
-import java.util.List;
 
 import static project.Main.world;
 
-public class Sheep extends Entity{
-    @Override
+public class Sheep extends Animal{
     public void tick() {
         current_delay++;
+        hunger--;
+
+        if (hunger < 0 ){
+            world.despawn(this);
+            return;
+        }
 
         if (current_delay >= DELAY){
             current_delay = 0;
@@ -19,11 +22,7 @@ public class Sheep extends Entity{
         }
     }
 
-
-
     private void move_random() {
-
-
         Collections.shuffle(world.directions);
 
         for (int[] dir : world.directions) {
@@ -32,13 +31,12 @@ public class Sheep extends Entity{
 
             Object obj = world.get(new Position(guess_x, guess_y));
 
-            if (obj == null) {
-                world.move(this, new Position(guess_x, guess_y));
+            Position move_pos = new Position(guess_x, guess_y);
+
+            if (obj == null && world.is_not_out_of_bound(move_pos)) {
+                world.move(this, move_pos);
                 return;
             }
         }
-
-
-
     }
 }
