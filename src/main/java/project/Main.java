@@ -11,14 +11,15 @@ public class Main {
     }
 
     private static void init_entities() {
-        for (int i = 0; i < 3000; i++) {
-            Animal rand_sheep = new Sheep();
-            rand_sheep.pos = new Position(Randomizer.rand_range(0, World.GRID_HEIGHT), Randomizer.rand_range(0, World.GRID_WIDTH));
-            rand_sheep.DELAY = 4;
-            rand_sheep.hunger = 25;
-//            rand_sheep.hunger = Randomizer.rand_range(20, 30);
-            world.spawn(rand_sheep);
+        for (int i = 0; i < 100 * World.common_mult; i++) {
+            world.spawn_random(Sheep::new);
         }
+        for (int i = 0; i < 10 * World.common_mult; i++) {
+            world.spawn_random(Grass::new);
+        }
+//        for (int i = 0; i < 10; i++) {
+//            world.spawn_random(Sheep::new);
+//        }
 
     }
 }
