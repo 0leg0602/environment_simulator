@@ -10,7 +10,7 @@ import static project.Main.world;
 public class Painter extends JPanel implements ActionListener {
 
     private final int DELAY = 16;
-    private int TICK_SPEED = 10;
+    private int TICK_SPEED = 300;
     private int window_width = 1000;
     private int window_height = 1040;
 
@@ -52,18 +52,28 @@ public class Painter extends JPanel implements ActionListener {
             Entity entity = world.all_entities.get(i);
             g.setColor(Color.WHITE);
             double ratio = 0;
-            if (entity instanceof Animal animal) {
-                ratio = 1.0 - (double) animal.hunger/20;
+            if (entity instanceof Sheep animal) {
+                ratio = (double) animal.hunger/20;
             }
 
-            int red = (int) (entity.color.getRed() + (255 - entity.color.getRed()) * ratio);
-            int green = (int) (entity.color.getGreen() + (0 - entity.color.getGreen()) * ratio);
-            int blue = (int) (entity.color.getBlue() + (0 - entity.color.getBlue()) * ratio);
-            g.setColor(new Color(red, green, blue));
+            g.setColor(new Color(255, (int) (255*ratio), (int) (255*ratio)));
 
             draw_entity(g, entity.pos);
         }
 
+        if (world.alpha_wolf != null) {
+            if (world.alpha_wolf.prev_pos != null){
+                g.setColor(Color.YELLOW);
+                int offset = window_width/2 - window_height/2;
+                double scale_v = (double) window_height / World.GRID_HEIGHT;
+                g2d.setStroke(new BasicStroke(2));
+                g2d.drawLine((int) (offset + (int) (world.alpha_wolf.pos.x * scale_v)), (int) (world.alpha_wolf.pos.y * scale_v), (int) (offset + (int) (world.alpha_wolf.prev_pos.x * scale_v)), (int) (world.alpha_wolf.prev_pos.y * scale_v));
+            }
+            g.setColor(Color.BLACK);
+            draw_entity(g, world.alpha_wolf.pos);
+        }
+
+        g2d.setStroke(new BasicStroke(1));
         g.setColor(new Color(0, 0, 0, 150));
         g.fillRect(0, 0, 300, 65);
         g.setColor(Color.WHITE);

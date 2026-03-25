@@ -14,11 +14,12 @@ public class World {
     public List<Position> empty_spaces = new ArrayList<>();
 //    public List<Position> empty_grass_spaces = new ArrayList<>();
     List<int[]> directions = new ArrayList<>();
+    public AlphaWolf alpha_wolf;
 
     public static int sheep_death = 0;
     public static int grass_death = 0;
 
-    public static int common_mult = 10;
+    public static int common_mult = 3;
 
     public static int GRID_HEIGHT = 100 * common_mult;
     public static int GRID_WIDTH = 100 * common_mult;

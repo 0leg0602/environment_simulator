@@ -14,12 +14,10 @@ public class Main {
         for (int i = 0; i < 100 * World.common_mult; i++) {
             world.spawn_random(Sheep::new);
         }
-        for (int i = 0; i < 10 * World.common_mult; i++) {
-            world.spawn_random(Grass::new);
-        }
-//        for (int i = 0; i < 10; i++) {
-//            world.spawn_random(Sheep::new);
+//        for (int i = 0; i < 10 * World.common_mult; i++) {
+//            world.spawn_random(Grass::new);
 //        }
+        world.spawn_random(AlphaWolf::new);
 
     }
 }

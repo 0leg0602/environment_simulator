@@ -19,7 +19,7 @@ public class Grass extends Entity {
         if (current_delay >= target_delay){
             current_delay = 0;
             change_delay();
-            spread_and_conquer();
+//            spread_and_conquer();
         }
 
     }
