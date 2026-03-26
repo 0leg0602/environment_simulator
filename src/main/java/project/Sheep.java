@@ -15,7 +15,7 @@ public class Sheep extends Animal{
 
     public void tick() {
         current_delay++;
-//        hunger--;
+        hunger--;
 
         if (hunger < 0 ){
             World.sheep_death += 1;

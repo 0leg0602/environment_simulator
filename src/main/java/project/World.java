@@ -17,9 +17,10 @@ public class World {
     public AlphaWolf alpha_wolf;
 
     public static int sheep_death = 0;
+    public static int sheep_eaten = 0;
     public static int grass_death = 0;
 
-    public static int common_mult = 3;
+    public static int common_mult = 2;
 
     public static int GRID_HEIGHT = 100 * common_mult;
     public static int GRID_WIDTH = 100 * common_mult;

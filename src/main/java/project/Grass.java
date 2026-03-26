@@ -19,18 +19,20 @@ public class Grass extends Entity {
         if (current_delay >= target_delay){
             current_delay = 0;
             change_delay();
-//            spread_and_conquer();
+            spread_and_conquer();
         }
 
     }
 
     private void change_delay(){
-        if (world.grass.size() < 100){
-            target_delay = Randomizer.rand_range(1, 2);
-        } else if (world.grass.size() < 500){
+        if (world.grass.size() > 10000){
+            target_delay = Randomizer.rand_range(40, 60);
+        } else if (world.grass.size() > 2000){
+            target_delay = Randomizer.rand_range(14, 20);
+        } else if (world.grass.size() > 500) {
             target_delay = Randomizer.rand_range(3, 7);
         } else {
-            target_delay = Randomizer.rand_range(7, 13);
+            target_delay = Randomizer.rand_range(1, 2);
         }
     }
     

@@ -1,30 +1,44 @@
 package project;
 
 import java.awt.*;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Random;
 
 import static project.Main.world;
 
 public class AlphaWolf extends Animal{
     boolean is_hunting = false;
-    public Position prev_pos = null;
+    public List<Position> prev_pos = new ArrayList<>();
 
     public AlphaWolf() {
         world.alpha_wolf = this;
-        hunger = 10;
-//        target_food = 30;
+        hunger = 200 * World.common_mult;
         color = Color.black;
     }
 
     @Override
     public void tick() {
-//        System.out.println("wolf is ticking");
         if (is_hunting) {
-            hunt();
+            for (int i = 0; i < World.common_mult; i++) {
+                hunt();
+            }
+        } else {
+            hunger -= 3;
+            if (hunger < 0) {
+                is_hunting = true;
+            }
+        }
+        int sheep_target = (int) (80 * World.common_mult + Math.sqrt(world.all_entities.size()*10));
+        System.out.println(sheep_target);
+
+        if (hunger > sheep_target) {
+            prev_pos.clear();
+            is_hunting = false;
         }
 
-        hunger -= 1;
-        if (hunger < 0) {
-            is_hunting = true;
+        if (hunger < -20){
+            world.alpha_wolf = null;
         }
 
     }
@@ -35,36 +49,29 @@ public class AlphaWolf extends Animal{
         for (int search_circle = 1; search_circle < 50; search_circle++) {
             for (int i_x = -search_circle; i_x <= search_circle; i_x++) {
                 int glob_x = i_x + this.pos.x;
-//                if (glob_x < 0 || glob_x > World.GRID_WIDTH){
-//                    continue;
-//                }
                 for (int i_y = -search_circle; i_y <= search_circle; i_y++) {
                     if (i_x == 0 && i_y == 0) continue;
 
                     int glob_y = i_y + this.pos.y;
-//                    Object obj = world.get(new Position(glob_x, glob_y));
-//                    System.out.println(obj);
                     Position glob_pos = new Position(glob_x, glob_y);
                     if (world.get(glob_pos) instanceof Sheep shep) {
-//                        System.out.println("shep");
                         world.despawn(shep);
-                        prev_pos = pos;
+                        World.sheep_eaten += 1;
+                        prev_pos.add(pos);
                         world.move(this, glob_pos);
-                        hunger ++;
+                        hunger += 1;
                         return;
                     }
-
-//                    world.spawn_pos(Grass::new, new Position(glob_x, glob_y));
-//                directions.add(new int[]{i_x, i_y});
                 }
             }
         }
+        int x = Randomizer.rand_range(-50, 50) + pos.x;
+        int y = Randomizer.rand_range(-50, 50) + pos.y;
+        x = Math.clamp(x, 0, World.GRID_WIDTH);
+        y = Math.clamp(y, 0, World.GRID_HEIGHT);
+        prev_pos.add(pos);
+        world.move(this, new Position(x, y));
+        hunger -= 1;
 
-
-//        for (int search_circle = 1; search_circle < World.GRID_WIDTH; search_circle++) {
-//            for (int x = 0; x < 0; x++) {
-//
-//            }
-//        }
     }
 }
