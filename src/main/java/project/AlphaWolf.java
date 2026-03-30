@@ -1,44 +1,42 @@
 package project;
 
-import java.awt.*;
+import java.awt.Color;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Random;
 
-import static project.Main.world;
+import static project.Main.getWorld;
 
 public class AlphaWolf extends Animal{
-    boolean is_hunting = false;
-    public List<Position> prev_pos = new ArrayList<>();
+    private boolean hunting = false;
+    private final List<Position> prev_pos = new ArrayList<>();
 
     public AlphaWolf() {
-        world.alpha_wolf = this;
-        hunger = 200 * World.common_mult;
-        color = Color.black;
+        getWorld().setAlpha_wolf(this);
+        setHunger(200 * World.getCommon_multiplier());
+        setColor(Color.black);
     }
 
     @Override
     public void tick() {
-        if (is_hunting) {
-            for (int i = 0; i < World.common_mult; i++) {
+        if (isHunting()) {
+            for (int i = 0; i < World.getCommon_multiplier(); i++) {
                 hunt();
             }
         } else {
-            hunger -= 3;
-            if (hunger < 0) {
-                is_hunting = true;
+            setHunger(getHunger() - 3);
+            if (getHunger() < 0) {
+                setHunting(true);
             }
         }
-        int sheep_target = (int) (80 * World.common_mult + Math.sqrt(world.all_entities.size()*10));
-        System.out.println(sheep_target);
+        int sheep_target = (int) (80 * World.getCommon_multiplier() + Math.sqrt(getWorld().getAll_entities().size()*10));
 
-        if (hunger > sheep_target) {
-            prev_pos.clear();
-            is_hunting = false;
+        if (getHunger() > sheep_target) {
+            getPrev_pos().clear();
+            setHunting(false);
         }
 
-        if (hunger < -20){
-            world.alpha_wolf = null;
+        if (getHunger() < -20){
+            getWorld().setAlpha_wolf(null);
         }
 
     }
@@ -48,30 +46,42 @@ public class AlphaWolf extends Animal{
 
         for (int search_circle = 1; search_circle < 50; search_circle++) {
             for (int i_x = -search_circle; i_x <= search_circle; i_x++) {
-                int glob_x = i_x + this.pos.x;
+                int glob_x = i_x + this.getPos().getX();
                 for (int i_y = -search_circle; i_y <= search_circle; i_y++) {
                     if (i_x == 0 && i_y == 0) continue;
 
-                    int glob_y = i_y + this.pos.y;
+                    int glob_y = i_y + this.getPos().getY();
                     Position glob_pos = new Position(glob_x, glob_y);
-                    if (world.get(glob_pos) instanceof Sheep shep) {
-                        world.despawn(shep);
-                        World.sheep_eaten += 1;
-                        prev_pos.add(pos);
-                        world.move(this, glob_pos);
-                        hunger += 1;
+                    if (getWorld().get(glob_pos) instanceof Sheep shep) {
+                        getWorld().despawn(shep);
+                        World.setSheep_eaten(World.getSheep_eaten() + 1);
+                        getPrev_pos().add(getPos());
+                        getWorld().move(this, glob_pos);
+                        setHunger(getHunger() + 1);
                         return;
                     }
                 }
             }
         }
-        int x = Randomizer.rand_range(-50, 50) + pos.x;
-        int y = Randomizer.rand_range(-50, 50) + pos.y;
-        x = Math.clamp(x, 0, World.GRID_WIDTH);
-        y = Math.clamp(y, 0, World.GRID_HEIGHT);
-        prev_pos.add(pos);
-        world.move(this, new Position(x, y));
-        hunger -= 1;
+        int x = Randomizer.rand_range(-50, 50) + getPos().getX();
+        int y = Randomizer.rand_range(-50, 50) + getPos().getY();
+        x = Math.clamp(x, 0, World.getGridWidth());
+        y = Math.clamp(y, 0, World.getGridHeight());
+        getPrev_pos().add(getPos());
+        getWorld().move(this, new Position(x, y));
+        setHunger(getHunger() - 1);
 
+    }
+
+    public boolean isHunting() {
+        return hunting;
+    }
+
+    public void setHunting(boolean hunting) {
+        this.hunting = hunting;
+    }
+
+    public List<Position> getPrev_pos() {
+        return prev_pos;
     }
 }

@@ -7,23 +7,22 @@ import java.util.Map;
 import java.util.function.Supplier;
 
 public class World {
-    private Map<Position, Entity> world_grid = new HashMap<>();
-    private Map<Position, Entity> grass_grid = new HashMap<>();
-    public List<Entity> all_entities = new ArrayList<>();
-    public List<Entity> grass = new ArrayList<>();
-    public List<Position> empty_spaces = new ArrayList<>();
-//    public List<Position> empty_grass_spaces = new ArrayList<>();
-    List<int[]> directions = new ArrayList<>();
-    public AlphaWolf alpha_wolf;
+    private final Map<Position, Entity> world_grid = new HashMap<>();
+    private final Map<Position, Entity> grass_grid = new HashMap<>();
+    private final List<Entity> all_entities = new ArrayList<>();
+    private final List<Entity> grass = new ArrayList<>();
+    private final List<Position> empty_spaces = new ArrayList<>();
+    private final List<int[]> directions = new ArrayList<>();
+    private AlphaWolf alpha_wolf;
 
-    public static int sheep_death = 0;
-    public static int sheep_eaten = 0;
-    public static int grass_death = 0;
+    private static int sheep_death = 0;
+    private static int sheep_eaten = 0;
+    private static int grass_death = 0;
 
-    public static int common_mult = 2;
+    private static final int common_multiplier = 2;
 
-    public static int GRID_HEIGHT = 100 * common_mult;
-    public static int GRID_WIDTH = 100 * common_mult;
+    private final static int GRID_HEIGHT = 100 * getCommon_multiplier();
+    private final static int GRID_WIDTH = 100 * getCommon_multiplier();
 
 
 
@@ -31,65 +30,101 @@ public class World {
         for (int i_x = -1; i_x <= 1; i_x++) {
             for (int i_y = -1; i_y <= 1; i_y++) {
                 if (i_x == 0 && i_y == 0) continue;
-                directions.add(new int[]{i_x, i_y});
+                getDirections().add(new int[]{i_x, i_y});
             }
         }
-        for (int x = 0; x < GRID_WIDTH; x++) {
-            for (int y = 0; y < GRID_HEIGHT; y++) {
-                empty_spaces.add(new Position(x, y));
+        for (int x = 0; x < getGridWidth(); x++) {
+            for (int y = 0; y < getGridHeight(); y++) {
+                getEmpty_spaces().add(new Position(x, y));
             }
         }
     }
 
-    public void spawn(Entity entity){
+    public static int getSheep_death() {
+        return sheep_death;
+    }
+
+    public static void setSheep_death(int sheep_death) {
+        World.sheep_death = sheep_death;
+    }
+
+    public static int getSheep_eaten() {
+        return sheep_eaten;
+    }
+
+    public static void setSheep_eaten(int sheep_eaten) {
+        World.sheep_eaten = sheep_eaten;
+    }
+
+    public static int getGrass_death() {
+        return grass_death;
+    }
+
+    public static void setGrass_death(int grass_death) {
+        World.grass_death = grass_death;
+    }
+
+    public static int getCommon_multiplier() {
+        return common_multiplier;
+    }
+
+    public static int getGridHeight() {
+        return GRID_HEIGHT;
+    }
+
+    public static int getGridWidth() {
+        return GRID_WIDTH;
+    }
+
+    private void spawn(Entity entity) {
         if (entity instanceof Grass){
-            grass_grid.put(entity.pos, entity);
-            grass.add(entity);
+            grass_grid.put(entity.getPos(), entity);
+            getGrass().add(entity);
         } else {
-            world_grid.put(entity.pos, entity);
-            all_entities.add(entity);
+            world_grid.put(entity.getPos(), entity);
+            getAll_entities().add(entity);
         }
     }
 
-    public void spawn_random(Supplier<Entity> solver){
+    public void spawn_random(Supplier<Entity> solver) {
         Entity entity = solver.get();
-        int i = Randomizer.rand_range(0, empty_spaces.size());
-        entity.pos = empty_spaces.get(i);
-        empty_spaces.remove(i);
+        int i = Randomizer.rand_range(0, getEmpty_spaces().size());
+        entity.setPos(getEmpty_spaces().get(i));
+        getEmpty_spaces().remove(i);
         spawn(entity);
     }
 
-    public void spawn_pos(Supplier<Entity> solver, Position pos){
+    public void spawn_pos(Supplier<Entity> solver, Position pos) {
         Entity entity = solver.get();
-        entity.pos = pos;
+        entity.setPos(pos);
         spawn(entity);
     }
 
-    public void despawn(Entity entity){
+    public void despawn(Entity entity) {
         if (entity instanceof Grass){
-            grass_grid.remove(entity.pos);
-            grass.remove(entity);
+            grass_grid.remove(entity.getPos());
+            getGrass().remove(entity);
         } else {
-            world_grid.remove(entity.pos);
-            all_entities.remove(entity);
+            world_grid.remove(entity.getPos());
+            getAll_entities().remove(entity);
         }
     }
 
-    public void move(Entity entity, Position pos){
-        world_grid.remove(entity.pos);
-        entity.pos = pos;
+    public void move(Entity entity, Position pos) {
+        world_grid.remove(entity.getPos());
+        entity.setPos(pos);
         world_grid.put(pos, entity);
     }
 
-    public Entity get(Position pos){
+    public Entity get(Position pos) {
         return world_grid.get(pos);
     }
 
-    public boolean is_not_out_of_bound(Position pos){
-        if (pos.x < 0 || pos.x > World.GRID_WIDTH){
+    public boolean is_not_out_of_bound(Position pos) {
+        if (pos.getX() < 0 || pos.getX() > World.getGridWidth()){
             return false;
         }
-        if  (pos.y < 0 || pos.y > World.GRID_HEIGHT){
+        if  (pos.getY() < 0 || pos.getY() > World.getGridHeight()) {
             return false;
         }
         return true;
@@ -98,5 +133,29 @@ public class World {
 
     public Entity get_grass(Position pos) {
         return grass_grid.get(pos);
+    }
+
+    public List<Entity> getAll_entities() {
+        return all_entities;
+    }
+
+    public List<Entity> getGrass() {
+        return grass;
+    }
+
+    private List<Position> getEmpty_spaces() {
+        return empty_spaces;
+    }
+
+    public List<int[]> getDirections() {
+        return directions;
+    }
+
+    public AlphaWolf getAlpha_wolf() {
+        return alpha_wolf;
+    }
+
+    public void setAlpha_wolf(AlphaWolf alpha_wolf) {
+        this.alpha_wolf = alpha_wolf;
     }
 }
