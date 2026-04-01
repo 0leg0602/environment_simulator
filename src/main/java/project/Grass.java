@@ -5,13 +5,22 @@ import java.util.Collections;
 
 import static project.Main.getWorld;
 
+/**
+ * Represents a grass entity in the simulation.
+ */
 public class Grass extends Entity {
 
+    /**
+     * Creates a new Grass entity with a random color
+     */
     public Grass() {
         setColor(new Color(Randomizer.rand_range(0, 40), Randomizer.rand_range(210, 255), Randomizer.rand_range(0, 40)));
         change_delay();
     }
 
+    /**
+     * Main logic, simulation tick
+     */
     @Override
     public void tick() {
         setCurrent_delay(getCurrent_delay() + 1);
@@ -24,6 +33,11 @@ public class Grass extends Entity {
 
     }
 
+    /**
+     * Updates the target delay based on the current number of grass entities.
+     * The delay is decreased as the grass count grows, allowing more frequent
+     * spread when the population is small.
+     */
     private void change_delay(){
         if (getWorld().getGrass().size() > 10000){
             setTarget_delay(Randomizer.rand_range(40, 60));
@@ -35,7 +49,11 @@ public class Grass extends Entity {
             setTarget_delay(Randomizer.rand_range(1, 2));
         }
     }
-    
+
+    /**
+     * Attempts to spread grass to adjacent cells.
+     * The directions are shuffled to randomize spread order.
+     */
     private void spread_and_conquer() {
         Collections.shuffle(getWorld().getDirections());
 

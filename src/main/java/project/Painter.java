@@ -168,7 +168,7 @@ public class Painter extends JPanel implements ActionListener, KeyListener {
      */
     private void draw_entity(Graphics g, Position pos, boolean to_offest, boolean is_a_well_fed_wolf){
         double scale_v = (double) window_height / World.getGridHeight();
-        // Scale only vertically not horizontally, make my simulation a square
+        // Scale only vertically not horizontally, in order to make my simulation display a square
 
         int x1 = (int) (pos.getX() * scale_v);
         int y1 = (int) (pos.getY() * scale_v);

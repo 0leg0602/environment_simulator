@@ -6,16 +6,25 @@ import java.util.List;
 
 import static project.Main.getWorld;
 
+/**
+ * Represents a wolf entity in the simulation.
+ */
 public class AlphaWolf extends Animal{
     private boolean hunting = false;
     private final List<Position> prev_pos = new ArrayList<>();
 
+    /**
+     * Creates an AlphaWolf and registers it in the world.
+     */
     public AlphaWolf() {
         getWorld().setAlpha_wolf(this);
         setHunger(200 * World.getCommon_multiplier());
         setColor(Color.black);
     }
 
+    /**
+     * Main logic, simulation tick.
+     */
     @Override
     public void tick() {
         if (isHunting()) {
@@ -41,9 +50,10 @@ public class AlphaWolf extends Animal{
 
     }
 
+    /**
+     * Searches for sheep to eat within a radius and moves the wolf.
+     */
     private void hunt() {
-//        System.out.println("wolf is hunting");
-
         for (int search_circle = 1; search_circle < 50; search_circle++) {
             for (int i_x = -search_circle; i_x <= search_circle; i_x++) {
                 int glob_x = i_x + this.getPos().getX();
@@ -73,14 +83,23 @@ public class AlphaWolf extends Animal{
 
     }
 
+    /**
+     * @return Returns whether the wolf is currently hunting.
+     */
     public boolean isHunting() {
         return hunting;
     }
 
+    /**
+     * @param hunting Sets the hunting state of the wolf.
+     */
     public void setHunting(boolean hunting) {
         this.hunting = hunting;
     }
 
+    /**
+     * @return Returns the list of previous positions the wolf visited.
+     */
     public List<Position> getPrev_pos() {
         return prev_pos;
     }

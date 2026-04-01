@@ -5,14 +5,24 @@ import java.util.Collections;
 
 import static project.Main.getWorld;
 
+/**
+ * Represents a sheep entity in the simulation.
+ */
 public class Sheep extends Animal{
 
+    /**
+     * Constructs a new {@code Sheep} with default hunger, target food,
+     * and color.
+     */
     public Sheep() {
         setHunger(20);
         setTarget_food(5);
         setColor(Color.white);
     }
 
+    /**
+     * Main logic, simulation tick
+     */
     public void tick() {
         setCurrent_delay(getCurrent_delay() + 1);
         setHunger(getHunger() - 1);
@@ -43,6 +53,10 @@ public class Sheep extends Animal{
         }
     }
 
+
+    /**
+     * Moves this sheep to a random empty adjacent position.
+     */
     private void move_random() {
         Collections.shuffle( getWorld().getDirections());
 
@@ -61,6 +75,9 @@ public class Sheep extends Animal{
         }
     }
 
+    /**
+     *  Spawns a new sheep in a random adjacent empty location
+     */
     private void unforeseen_anomalous_impactful_sheep_mitosis() {
         Collections.shuffle( getWorld().getDirections());
 
